@@ -45,12 +45,10 @@ let findMaxRoute = function(w,h,x0,y0){
     let max = 0;
     let records = [];//max records
     let itr = function(){
-        if(route.length === 4)console.log("l4");
-        //if(route.length === 6)console.log("l6");
+        if(route.length === 4)console.log(`route ${route[0]}, ${route[1]} -> ${route[2]}, ${route[3]} -> ${x}, ${y} ...`);
         route.push(x);
         route.push(y);
         if(route.length > max){
-            //console.log(records.length,max-2);
             records = [[...route]];
             max = route.length;
         }else if(route.length === max){
@@ -90,21 +88,25 @@ let findMaxRoute = function(w,h,x0,y0){
 }
 
 
-//console.log(findMaxRoute(4,4,0,0));
 
 let findAllMaxPaths = function(w,h){
     let results = [];
     for(let y = 0; y < h-2; y++){
         for(let x = 0; x < w-1; x++){
+            console.log(`traversing path ${x}, ${y} -> ${x+1}, ${y+2} ...`);
             results.push(findMaxRoute(w,h,x,y));
-            console.log(`${x}, ${y} complete`);
         }
     }
     return results;
 }
 
 let main = function(){
-    let n = 8;
+    let n = parseInt(process.argv[2]);
+    if(isNaN(n)){
+        console.log("please provide the grid size n");
+        process.exit(1);
+    }
+    console.log(`calculating max knights tours on a ${n}x${n} board`);
     
     let result = findAllMaxPaths(n,n);
     fs.writeFileSync(`result${n}x${n}.json`,JSON.stringify(result));
@@ -113,3 +115,5 @@ let main = function(){
 };
 
 main();
+
+//findMaxRoute(8,8,6,4)
